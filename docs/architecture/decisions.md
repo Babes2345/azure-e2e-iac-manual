@@ -118,7 +118,7 @@
 ## ADR-007 - Cost Controls: Tags + Budget + Teardown Process
 
 - ### Status: 
- Accepted
+  Accepted
 - ### Decision:
   Enforce tagging and configure a budget with alerts; maintain a documented teardown.
 - ### Rationale:
