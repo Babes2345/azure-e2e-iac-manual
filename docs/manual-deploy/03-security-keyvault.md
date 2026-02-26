@@ -1,193 +1,193 @@
-03 – Security and Key Vault Deployment
-Objectives
+# Security and Key Vault Deployment - Phase 03
 
-The objective of this step is to establish a secure secrets management baseline using Azure-native services.
+## Objectives
 
-By the end of this step:
+The objective of this phase is to establish a secure secrets management baseline using Azure-native services.
 
-A Key Vault is deployed with production security settings
+By the end of this deployment:
 
-Access is controlled using Azure RBAC
+- A Key Vault is deployed using production-aligned security settings
+- Access control is managed through Azure RBAC
+- The vault is prepared for Managed Identity integration
+- No secrets are exposed in code or configuration files
 
-The vault is ready for Managed Identity integration
+This phase intentionally occurs **before workload deployment** to enforce a security-first architecture.
 
-No secrets are exposed in code or configuration files
+---
 
-This step intentionally precedes workload deployment to enforce security-first design.
+## Step 1 - Create the Key Vault
 
-Key Vault Configuration
-Step 1 — Create the Key Vault
+### Azure Portal
 
-Azure Portal
+1. Navigate to **Key Vaults**
+2. Select **Create**
 
-Navigate to Key Vaults
+### Configuration
 
-Select Create
+| Setting | Value |
+|--------|------|
+| Subscription | Target subscription |
+| Resource Group | `rg-platform` |
+| Key Vault Name | Project-aligned naming (e.g., `kv-e2e-prod`) |
+| Region | Same region as platform resources |
+| Pricing Tier | Standard |
 
-Configure:
+Proceed through remaining tabs and select **Create**.
 
-Subscription: Target subscription
+---
 
-Resource Group: rg-platform
+### Validation
 
-Key Vault Name: Use project-aligned naming (e.g., kv-e2e-prod)
+Confirm:
 
-Region: Same region as platform resources
+- Key Vault exists in `rg-platform`
+- Region matches Log Analytics and Application Insights resources
 
-Pricing Tier: Standard
+---
 
-Select Next until the Review stage
+## Step 2 - Enable Security Protections
 
-Create the Key Vault
+Navigate to:
 
-Validation
+**Key Vault → Properties**
 
-Confirm the Key Vault exists in rg-platform
+Ensure the following settings are enabled:
 
-Confirm the region matches Log Analytics and Application Insights
+| Setting | Status |
+|--------|--------|
+| Soft Delete | Enabled |
+| Purge Protection | Enabled |
 
-Step 2 — Enable Security Protections
+These protections are mandatory in most production environments and cannot be disabled once enabled.
 
-In the Key Vault Settings:
+### Validation
 
-Navigate to Properties
+- Soft delete shows as enabled
+- Purge protection shows as enabled
 
-Ensure the following are enabled:
+---
 
-Soft Delete: Enabled
+## Step 3 - Select RBAC Authorization Model
 
-Purge Protection: Enabled
+Navigate to:
 
-These settings are mandatory in most production environments and cannot be disabled once enabled.
+**Key Vault → Access configuration**
 
-Validation
-
-Soft delete shows as enabled
-
-Purge protection shows as enabled
-
-Access Control Model
-Step 3 — Select RBAC Authorization Model
-
-In the Key Vault blade, navigate to Access configuration
-
-Set Permission model to:
-
+Set **Permission model** to:
 Azure role-based access control (RBAC)
+Select **Save**.
 
-Save changes
+### Rationale
 
-Rationale
+RBAC:
 
-RBAC provides centralized, auditable access control
+- Provides centralized and auditable access control
+- Aligns with modern Azure security practices
+- Scales better than legacy access policies
 
-Aligns with modern Azure security practices
+---
 
-Scales better than access policies
+## Step 4 - Assign Administrative Access
 
-Role Assignments
-Step 4 — Assign Administrative Access
+Grant administrative access only to required identities.
 
-Assign administrative access only to required identities.
+### Azure Portal
 
-Azure Portal
+1. Navigate to **Access control (IAM)** on the Key Vault
+2. Select **Add → Add role assignment**
 
-Navigate to Access control (IAM) on the Key Vault
+### Assignment
 
-Select Add role assignment
+| Setting | Value |
+|--------|------|
+| Role | Key Vault Administrator |
+| Scope | This resource |
+| Member | Administrative user or group |
 
-Assign:
+### Validation
 
-Role: Key Vault Administrator
+- Role assignment appears under IAM
+- Administrative user can access Key Vault settings
 
-Scope: This resource
+---
 
-Member: Your administrative user or group
+## Step 5 - Prepare for Managed Identity Access
 
-Validation
+No workload identity exists yet; however, required access is defined for future deployment.
 
-Confirm role assignment appears under IAM
+The workload Managed Identity will receive:
 
-Confirm you can view Key Vault settings
-
-Step 5 — Prepare for Managed Identity Access
-
-No workload identity exists yet.
-However, this step documents the required role for later use.
-
-The workload Managed Identity will be assigned:
-
-Role: Key Vault Secrets User
-
-Scope: Key Vault resource
+| Role | Scope |
+|------|------|
+| Key Vault Secrets User | Key Vault resource |
 
 This role allows secret retrieval without granting administrative permissions.
 
-This assignment will be completed in Step 04 – Workload Deployment once the identity exists.
+The assignment will be completed during **Phase 04 — Workload Deployment**.
 
-Security Settings
-Step 6 — Network Access Configuration
+---
+
+## Step 6 - Network Access Configuration
 
 For this phase:
 
-Public network access: Enabled
+| Setting | Configuration |
+|--------|---------------|
+| Public network access | Enabled |
+| Firewall rules | Not restricted |
 
-Firewall rules: Not restricted
+### Reasoning
 
-Reasoning
+- Simplifies initial validation
+- Allows testing without networking dependencies
+- Private access patterns are deferred to later phases
 
-Simplifies initial validation
+This design decision is documented within architecture decisions documentation.
 
-Private access patterns are intentionally deferred to Phase 2
+---
 
-This decision is documented in decisions.md.
+## Step 7 - Optional Test Secret (Validation Only)
 
-Step 7 — Optional Test Secret (Validation Only)
+Create a temporary secret for validation purposes.
 
-To validate access later, create a test secret.
+1. Navigate to **Secrets**
+2. Select **Generate/Import**
 
-Navigate to Secrets
+### Configuration
 
-Select Generate/Import
+| Setting | Value |
+|--------|------|
+| Name | `demo-secret` |
+| Value | `placeholder-value` |
+| Activation | Immediate |
 
-Configure:
+Select **Create**.
 
-Name: demo-secret
+> **Important:**  
+> This secret is for validation only. No real credentials should be stored during this phase.
 
-Value: placeholder-value
+---
 
-Activation: Immediate
-
-Save
-
-Important
-
-This secret is for validation only
-
-No real credentials should be stored at this stage
-
-Validation
+## Validation Checklist
 
 Before proceeding, confirm:
 
-Key Vault exists in rg-platform
+-  Key Vault exists in `rg-platform`
+-  Soft delete and purge protection are enabled
+-  RBAC authorization model is active
+-  Administrative access is restricted
+-  At least one test secret exists
+-  No access policies are configured (RBAC-only model)
 
-Soft delete and purge protection are enabled
+---
 
-RBAC authorization model is active
+## Outcome
 
-Administrative access is restricted
+At completion of this phase:
 
-At least one test secret exists
+- A secure, production-aligned secrets store is deployed
+- Access control is centrally managed and auditable
+- The environment is prepared for Managed Identity integration
+- Security-first deployment principles are enforced
 
-No access policies are configured (RBAC only)
-
-Outcome
-
-At this stage:
-
-The platform has a secure, production-aligned secrets store
-
-Access is centrally managed and auditable
-
-The environment is ready for Managed Identity integration
+Proceed to the workload deployment phase once validation is complete.
