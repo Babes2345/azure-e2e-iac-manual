@@ -1,4 +1,4 @@
-# Cost Governance — Azure E2E Infrastructure Baseline
+# Cost Governance - Azure E2E Infrastructure Baseline
 
 ## Overview
 
