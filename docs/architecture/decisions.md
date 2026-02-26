@@ -20,7 +20,8 @@
 
 ## ADR-002 - Resource Organization: Two Resource Groups
 
-- ### Status: Accepted
+- ### Status:
+  Accepted
 - ### Decision:
   Separate resources into:
 
