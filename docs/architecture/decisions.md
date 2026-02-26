@@ -1,47 +1,52 @@
 # Architecture Decisions (ADR-lite)
+
+---
+
 ## ADR-001 - Workload Type: App Service (PaaS) over VMs
 
-Status: Accepted
-Decision: Use Azure App Service (Web App) as the primary workload for this project.
-Rationale:
+- Status: Accepted
+- Decision: Use Azure App Service (Web App) as the primary workload for this project.
+- Rationale:
 
-Demonstrates production-relevant PaaS patterns (identity, monitoring, deployment slots).
+- Demonstrates production-relevant PaaS patterns (identity, monitoring, deployment slots).
 
-Reduces operational overhead (patching, OS hardening) so focus stays on architecture, security, and governance.
+- Reduces operational overhead (patching, OS hardening) so focus stays on architecture, security, and governance.
 
-Strong alignment with AZ-104 operational tasks (monitoring, RBAC, diagnostics) and AZ-305 design priorities (managed services, resilience, cost).
-Consequences:
+- Strong alignment with AZ-104 operational tasks (monitoring, RBAC, diagnostics) and AZ-305 design priorities (managed services, resilience, cost).
+- Consequences:
 
-Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
+- Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
 
-Network hardening will be staged (public endpoint initially, optional private networking later).
+- Network hardening will be staged (public endpoint initially, optional private networking later).
 
 ---
 
 ## ADR-002 - Resource Organization: Two Resource Groups
 
-Status: Accepted
-Decision: Separate resources into:
+- Status: Accepted
+- Decision: Separate resources into:
 
-rg-platform (shared services: monitoring, key vault, state storage)
+- rg-platform (shared services: monitoring, key vault, state storage)
 
-rg-workload (application resources)
-Rationale:
+- rg-workload (application resources)
+- Rationale:
 
-Clear separation of concerns and access boundaries.
+-- Clear separation of concerns and access boundaries.
 
-Supports least-privilege RBAC and easier cost tracking.
-Consequences:
+-- Supports least-privilege RBAC and easier cost tracking.
+-- Consequences:
 
-Requires consistent tagging and naming to keep resources discoverable.
+-- Requires consistent tagging and naming to keep resources discoverable.
+
+---
 
 ## ADR-003 - Networking Baseline: Single VNet (Simple, Expandable)
 
-Status: Accepted
-Decision: Use a single Virtual Network with subnets reserved for future growth.
-Rationale:
+- Status: Accepted
+- Decision: Use a single Virtual Network with subnets reserved for future growth.
+- Rationale:
 
-Avoids hub/spoke overbuild while still showing strong networking fundamentals.
+ Avoids hub/spoke overbuild while still showing strong networking fundamentals.
 
 Keeps design clear and repeatable for manual → IaC progression.
 Consequences:
