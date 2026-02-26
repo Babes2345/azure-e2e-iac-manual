@@ -16,7 +16,7 @@ Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
 
 Network hardening will be staged (public endpoint initially, optional private networking later).
 
-##ADR-002 - Resource Organization: Two Resource Groups
+## ADR-002 - Resource Organization: Two Resource Groups
 
 Status: Accepted
 Decision: Separate resources into:
@@ -33,7 +33,7 @@ Consequences:
 
 Requires consistent tagging and naming to keep resources discoverable.
 
-##ADR-003 — Networking Baseline: Single VNet (Simple, Expandable)
+## ADR-003 - Networking Baseline: Single VNet (Simple, Expandable)
 
 Status: Accepted
 Decision: Use a single Virtual Network with subnets reserved for future growth.
@@ -49,7 +49,7 @@ Private endpoint integration is deferred (explicitly Phase 2 if needed).
 Notes:
 App Service does not “live inside” the VNet by default; VNet integration is optional and scenario-driven.
 
-##ADR-004 - Access Control: Azure RBAC + Least Privilege
+## ADR-004 - Access Control: Azure RBAC + Least Privilege
 
 Status: Accepted
 Decision: Use Azure RBAC for access management and scope assignments at the RG level.
@@ -62,7 +62,7 @@ Consequences:
 
 Requires careful role selection (avoid Owner where not necessary).
 
-##ADR-005 — Secrets: Key Vault + Managed Identity
+## ADR-005 — Secrets: Key Vault + Managed Identity
 
 Status: Accepted
 Decision: Store secrets in Azure Key Vault and access them using Managed Identity for the Web App where applicable.
@@ -75,7 +75,7 @@ Consequences:
 
 Requires Key Vault access configuration (RBAC or access policies, documented during build).
 
-##ADR-006 - Monitoring: Log Analytics + Application Insights + Alerts
+## ADR-006 - Monitoring: Log Analytics + Application Insights + Alerts
 
 Status: Accepted
 Decision: Centralize logs in Log Analytics, enable Application Insights, and configure a minimum alert set.
@@ -96,7 +96,7 @@ Server error threshold (5xx)
 
 Budget threshold alert (cost control)
 
-##ADR-007 - Cost Controls: Tags + Budget + Teardown Process
+## ADR-007 - Cost Controls: Tags + Budget + Teardown Process
 
 Status: Accepted
 Decision: Enforce tagging and configure a budget with alerts; maintain a documented teardown.
@@ -107,7 +107,7 @@ Consequences:
 
 Tagging must be consistent across manual and IaC deployments.
 
-##ADR-008 - IaC Strategy: Manual First → Terraform → Bicep (Parity)
+## ADR-008 - IaC Strategy: Manual First → Terraform → Bicep (Parity)
 
 Status: Accepted
 Decision: Implement the same architecture in three phases:
@@ -128,7 +128,7 @@ Consequences:
 
 Must document all config choices during manual deployment to ensure parity.
 
-##ADR-009 - Explicit Non-Goals (Scope Lock)
+## ADR-009 - Explicit Non-Goals (Scope Lock)
 
 Status: Accepted
 Decision: The following are out of scope for Project 1:
