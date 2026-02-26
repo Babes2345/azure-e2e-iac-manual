@@ -1,88 +1,61 @@
-Prerequisites
-Azure Subscription
+# Prerequisites
 
-An active Azure subscription is required to build and validate this project.
+This document outlines the requirements needed to successfully build and validate the Azure End-to-End Infrastructure environment using the manual deployment phase.
 
-A paid Azure subscription is recommended to ensure access to all required services and configurations.
+The manual deployment establishes foundational understanding before transitioning to Infrastructure as Code (Terraform).
 
-The Azure free tier may be used; however, it includes service limits and quotas that can restrict certain features, SKUs, or deployment options.
+---
 
-For consistent results and to avoid interruptions during the build, a minimum one-month active subscription is recommended.
+## Azure Subscription
 
-Required Permissions
+An active Azure subscription is required.
 
-The user performing the deployment must have sufficient permissions within the subscription:
+A **paid Azure subscription is recommended** to ensure full access to services, SKUs, and configurations used throughout the project.
 
-Owner or Contributor access at the subscription level for manual deployment
+The Azure Free Tier may be used; however, it includes quota and service limitations that may restrict certain deployments.
 
-Ability to create:
+> **Recommendation:**  
+> Maintain an active subscription for at least one month to avoid interruptions during the build process.
 
-Resource groups
+---
 
-Networking resources
+## Required Permissions
 
-App Service resources
+The deploying user must have sufficient privileges within the Azure subscription.
 
-Monitoring and logging resources
+### Minimum Required Access
 
-Role assignments
+- **Owner** or **Contributor** role at the subscription level
 
-Local Tooling
+### Required Capabilities
 
-The following tools must be installed and configured on the local machine:
+The user must be able to create and manage:
 
-Azure CLI (latest stable version)
+- Resource Groups
+- Virtual Networks and Networking Resources
+- App Service Resources
+- Monitoring and Logging Services
+- Role Assignments (RBAC)
 
-Terraform (latest stable version)
+---
 
-Bicep CLI (via Azure CLI)
+## Local Tooling
 
-Git
+The following tools must be installed and configured locally:
 
-A code editor (e.g., VS Code)
+| Tool | Purpose |
+|------|---------|
+| Azure CLI | Azure authentication and management |
+| Terraform | Infrastructure as Code deployment |
+| Bicep CLI | ARM/Bicep resource deployments |
+| Git | Version control |
+| Code Editor (VS Code recommended) | Development environment |
 
-Authentication to Azure must be verified using:
+---
 
+### Verify Azure Authentication
+
+Authenticate using:
+
+```bash
 az login
-
-Naming and Tagging Standards
-
-Before deployment, ensure a basic naming and tagging convention is defined and consistently applied:
-
-Resource names should reflect environment, workload, and purpose
-
-Required tags:
-
-environment
-
-project
-
-owner
-
-costCenter
-
-These standards will be enforced during both manual and IaC deployments.
-
-Cost Awareness
-
-This project provisions billable Azure resources.
-
-Costs should remain low if resources are destroyed after use.
-
-A budget and cost alert will be configured during deployment.
-
-A teardown process will be documented to ensure resources can be safely removed.
-
-Validation
-
-Before proceeding, confirm:
-
-Azure subscription is active
-
-Required permissions are assigned
-
-Local tools are installed and accessible
-
-Azure authentication is successful
-
-Once validated, proceed to Platform Deployment.
