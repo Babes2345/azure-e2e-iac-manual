@@ -1,4 +1,4 @@
-# Security Decisions — Azure E2E Infrastructure Baseline
+# Security Decisions - Azure E2E Infrastructure Baseline
 
 ## Overview
 
