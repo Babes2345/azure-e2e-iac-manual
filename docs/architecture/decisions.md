@@ -8,16 +8,16 @@
 - Decision: Use Azure App Service (Web App) as the primary workload for this project.
 - Rationale:
 
-- Demonstrates production-relevant PaaS patterns (identity, monitoring, deployment slots).
-
-- Reduces operational overhead (patching, OS hardening) so focus stays on architecture, security, and governance.
-
-- Strong alignment with AZ-104 operational tasks (monitoring, RBAC, diagnostics) and AZ-305 design priorities (managed services, resilience, cost).
-- Consequences:
-
-- Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
-
-- Network hardening will be staged (public endpoint initially, optional private networking later).
+    Demonstrates production-relevant PaaS patterns (identity, monitoring, deployment slots).
+   
+    Reduces operational overhead (patching, OS hardening) so focus stays on architecture, security, and governance.
+   
+     Strong alignment with AZ-104 operational tasks (monitoring, RBAC, diagnostics) and AZ-305 design priorities (managed services, resilience, cost).
+ -Consequences:
+   
+    Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
+   
+    Network hardening will be staged (public endpoint initially, optional private networking later).
 
 ---
 
@@ -26,9 +26,9 @@
 - Status: Accepted
 - Decision: Separate resources into:
 
-   rg-platform (shared services: monitoring, key vault, state storage)
-
-   rg-workload (application resources)
+      rg-platform (shared services: monitoring, key vault, state storage)
+   
+      rg-workload (application resources)
 - Rationale:
 
    Clear separation of concerns and access boundaries.
