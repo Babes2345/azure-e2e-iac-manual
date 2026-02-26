@@ -5,21 +5,16 @@
 ## ADR-001 - Workload Type: App Service (PaaS) over VMs
 
 - ### Status:
-      Accepted
+  Accepted
 - ### Decision:
-      Use Azure App Service (Web App) as the primary workload for this project.
+  Use Azure App Service (Web App) as the primary workload for this project.
 - ### Rationale:
-
-        Demonstrates production-relevant PaaS patterns (identity, monitoring, deployment slots).
-       
-        Reduces operational overhead (patching, OS hardening) so focus stays on architecture, security, and governance.
-       
-         Strong alignment with AZ-104 operational tasks (monitoring, RBAC, diagnostics) and AZ-305 design priorities (managed services, resilience, cost).
-  - ### Consequences:
-       
-        Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
-       
-        Network hardening will be staged (public endpoint initially, optional private networking later).
+  Demonstrates production-relevant PaaS patterns (identity, monitoring, deployment slots).
+  Reduces operational overhead (patching, OS hardening) so focus stays on architecture, security, and governance.
+  Strong alignment with AZ-104 operational tasks (monitoring, RBAC, diagnostics) and AZ-305 design priorities (managed services, resilience, cost).
+- ### Consequences:
+  Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
+  Network hardening will be staged (public endpoint initially, optional private networking later).
 
 ---
 
