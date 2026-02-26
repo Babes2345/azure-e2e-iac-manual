@@ -13,7 +13,7 @@
     Reduces operational overhead (patching, OS hardening) so focus stays on architecture, security, and governance.
    
      Strong alignment with AZ-104 operational tasks (monitoring, RBAC, diagnostics) and AZ-305 design priorities (managed services, resilience, cost).
- -Consequences:
+ - Consequences:
    
     Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
    
