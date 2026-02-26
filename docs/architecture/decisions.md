@@ -137,11 +137,11 @@
 - ### Decision:
   Implement the same architecture in three phases:
 
-  Manual deployment
+    - Manual deployment
 
-  Terraform (primary)
+    - Terraform (primary)
 
-  Bicep (parity)
+    - Bicep (parity)
 - ### Rationale:
 
   Manual build validates decisions and produces a “known-good” baseline.
@@ -171,6 +171,7 @@
   Private Link everywhere
 
   Management group-level governance
+  
 - ### Rationale:
 
   Keeps the project focused, finishable, and resume-ready.
