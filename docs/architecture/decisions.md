@@ -24,9 +24,9 @@
 - ### Decision:
   Separate resources into:
 
-      rg-platform (shared services: monitoring, key vault, state storage)
+   rg-platform (shared services: monitoring, key vault, state storage)
    
-      rg-workload (application resources)
+   rg-workload (application resources)
 - ### Rationale:
 
   Clear separation of concerns and access boundaries.
@@ -47,6 +47,7 @@
   Keeps design clear and repeatable for manual → IaC progression.
 - ### Consequences:
   Private endpoint integration is deferred (explicitly Phase 2 if needed).
+  
   Notes:
   - App Service does not “live inside” the VNet by default; VNet integration is optional and scenario-driven.
     
