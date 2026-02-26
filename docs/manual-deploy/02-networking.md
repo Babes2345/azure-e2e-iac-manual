@@ -1,131 +1,148 @@
-02 – Networking Deployment
-Purpose
+# Networking Deployment - Phase 02
 
-Establish a clean, secure, and expandable network baseline that supports the application workload while avoiding unnecessary architectural complexity.
+## Purpose
 
-This network design follows least-privilege principles and is intentionally scoped to allow future enhancements without redesign.
+This phase establishes a clean, secure, and expandable network baseline to support the application workload.
 
-Scope
+The network design follows **least-privilege principles** and is intentionally scoped to allow future enhancements without requiring architectural redesign.
 
-This step includes:
+This deployment creates foundational networking components used by all subsequent infrastructure.
 
-Virtual Network creation
+---
 
-Subnet design and allocation
+## Scope
 
-Network Security Group (NSG) creation
+This phase includes:
 
-NSG rule definition
+- Virtual Network (VNet) creation
+- Subnet design and allocation
+- Network Security Group (NSG) creation
+- NSG rule configuration
+- NSG association with subnets
+- Validation of effective security rules
 
-NSG association to subnets
+---
 
-Validation of effective security rules
+## Architecture Objectives
 
-Virtual Network Creation
-Step 1 — Create the Virtual Network
+The networking layer is designed to:
 
-Azure Portal
+- Provide logical isolation between resources
+- Enforce secure inbound access
+- Allow controlled outbound connectivity
+- Support future expansion (private endpoints, management services)
+- Maintain simplicity appropriate for a baseline environment
 
-Navigate to Virtual networks
+---
 
-Select Create
+## Step 1 - Create the Virtual Network
 
-Configure:
+### Azure Portal
 
-Subscription: Target subscription
+1. Navigate to **Virtual networks**
+2. Select **Create**
 
-Resource Group: rg-platform
+### Configuration
 
-Name: Use project-aligned naming (e.g., vnet-e2e-prod)
+| Setting | Value |
+|--------|------|
+| Subscription | Target subscription |
+| Resource Group | `rg-platform` |
+| Name | Project-aligned name (e.g., `vnet-e2e-prod`) |
+| Region | Same region as platform resources |
+| Address Space | `10.10.0.0/16` |
 
-Region: Same region as platform resources
+Proceed to the **IP Addresses** tab.
 
-Address space: e.g., 10.10.0.0/16
+---
 
-Proceed to IP Addresses
-
-Subnet Design
-Step 2 — Define Subnets
+## Step 2 - Define Subnets
 
 Create the following subnets:
 
-Subnet Name	Address Range	Purpose
-snet-app	10.10.1.0/24	Application workload
-snet-mgmt	10.10.2.0/24	Future management or private endpoints
+| Subnet Name | Address Range | Purpose |
+|-------------|--------------|---------|
+| `snet-app` | `10.10.1.0/24` | Application workload |
+| `snet-mgmt` | `10.10.2.0/24` | Future management or private endpoints |
 
-Subnets are intentionally defined even if not immediately used to demonstrate forward-looking design.
+Subnets are defined even if not immediately used to demonstrate forward-looking architectural planning.
 
-Complete the VNet creation.
+Complete Virtual Network creation.
 
-Network Security Group (NSG)
-Step 3 — Create the Network Security Group
+---
 
-Navigate to Network security groups
+## Step 3 - Create the Network Security Group (NSG)
 
-Select Create
+1. Navigate to **Network security groups**
+2. Select **Create**
 
-Configure:
+### Configuration
 
-Resource Group: rg-platform
+| Setting | Value |
+|--------|------|
+| Resource Group | `rg-platform` |
+| Name | e.g., `nsg-e2e-app` |
+| Region | Same region as VNet |
 
-Name: e.g., nsg-e2e-app
+---
 
-Region: Same as VNet
+## Step 4 - Configure NSG Rules
 
-Step 4 — Configure NSG Rules
+Define minimum required rules aligned with least-privilege networking.
 
-Define minimum required rules following least-privilege principles.
+### Inbound Rules
 
-Inbound Rules
-Priority	Name	Source	Destination	Port	Action	Purpose
-100	Allow-HTTPS	Internet	Any	443	Allow	Secure inbound traffic
-200	Deny-All-Inbound	Any	Any	Any	Deny	Default deny
-Outbound Rules
-Priority	Name	Destination	Port	Action	Purpose
-100	Allow-Internet	Internet	Any	Allow	Required outbound access
+| Priority | Name | Source | Destination Port | Action | Purpose |
+|---------|------|--------|------------------|--------|---------|
+| 100 | Allow-HTTPS | Internet | 443 | Allow | Secure inbound traffic |
+| 200 | Deny-All-Inbound | Any | Any | Deny | Default deny posture |
 
-Default Azure outbound rules may be used unless restrictions are required.
+### Outbound Rules
 
-NSG Association
-Step 5 — Associate NSG to Subnet
+| Priority | Name | Destination | Port | Action | Purpose |
+|---------|------|-------------|------|--------|---------|
+| 100 | Allow-Internet | Internet | Any | Allow | Required outbound access |
 
-Open the Network Security Group
+Azure default outbound rules may remain unless stricter controls are required.
 
-Navigate to Subnets
+---
 
-Select Associate
+## Step 5 - Associate NSG with Subnet
 
-Associate with:
+1. Open the **Network Security Group**
+2. Navigate to **Subnets**
+3. Select **Associate**
 
-Virtual Network: vnet-e2e-prod
+### Association
 
-Subnet: snet-app
+| Setting | Value |
+|--------|------|
+| Virtual Network | `vnet-e2e-prod` |
+| Subnet | `snet-app` |
 
-Validation
-Step 6 — Validate Effective Security Rules
+---
 
-Navigate to the subnet (snet-app)
+## Step 6 - Validate Effective Security Rules
 
-Select Effective security rules
+1. Navigate to subnet **snet-app**
+2. Select **Effective security rules**
 
 Confirm:
 
-Custom NSG rules are applied
+- Custom NSG rules are applied
+- Deny-by-default behavior is enforced
+- No unintended inbound access exists
 
-Deny-by-default behavior is enforced
+---
 
-No unintended inbound access exists
+## Outcome
 
-Outcome
+At completion of this phase:
 
-At the completion of this step:
+- A production-aligned Virtual Network is deployed
+- Subnets are clearly defined and documented
+- Network Security Groups enforce least-privilege access
+- The network is prepared to support workload resources
+- The design remains simple, secure, and expandable
 
-A production-aligned Virtual Network is deployed
-
-Subnets are clearly defined and documented
-
-Network Security Groups enforce least-privilege access
-
-The network is ready to support the workload
-
-The design remains simple and expandable
+Proceed to the next deployment phase once validation is complete.
