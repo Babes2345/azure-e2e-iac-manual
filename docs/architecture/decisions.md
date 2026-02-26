@@ -15,7 +15,7 @@ Consequences:
 Some “admin access” patterns (Bastion/SSH/RDP) are not required initially.
 
 Network hardening will be staged (public endpoint initially, optional private networking later).
-
+---
 ## ADR-002 - Resource Organization: Two Resource Groups
 
 Status: Accepted
