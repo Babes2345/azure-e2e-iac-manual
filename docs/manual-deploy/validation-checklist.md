@@ -1,184 +1,167 @@
-Manual Deployment Validation Checklist
-Purpose
+# Manual Deployment Validation Checklist
+
+## Purpose
 
 This checklist confirms that the manually deployed environment meets all architectural, security, monitoring, and operational requirements defined for this project.
 
 This document serves as:
 
-Proof of correct manual deployment
-
-The baseline for Terraform and Bicep parity
-
-A reference for troubleshooting and audits
+- Proof of successful manual deployment
+- The baseline for Terraform Infrastructure as Code parity
+- A reference for troubleshooting and audits
 
 All items must pass before Infrastructure as Code implementation begins.
 
-Platform Validation
-Resource Groups
+---
 
- rg-platform exists
+## Platform Validation
 
- rg-workload exists
+### Resource Groups
 
- Resource placement aligns with intended purpose
+- [ ] `rg-platform` exists
+- [ ] `rg-workload` exists
+- [ ] Resources are deployed into the correct resource groups
+- [ ] Resource placement aligns with architectural intent
 
-Naming and Tagging
+### Naming and Tagging
 
- Resources follow naming convention
+- [ ] Resources follow defined naming conventions
+- [ ] Required tags are applied consistently:
 
- Required tags are applied to all resources:
+  - `environment`
+  - `project`
+  - `owner`
+  - `costCenter`
 
-environment
+---
 
-project
+## Networking Validation
 
-owner
+### Virtual Network
 
-costCenter
+- [ ] Virtual Network exists in `rg-platform`
+- [ ] Address space matches documented architecture
+- [ ] Region matches platform resources
 
-Networking Validation
-Virtual Network
+### Subnets
 
- Virtual Network exists in rg-platform
+- [ ] `snet-app` exists
+- [ ] `snet-mgmt` (or reserved subnet) exists
+- [ ] Address ranges do not overlap
 
- Address space matches documented design
+### Network Security Groups
 
- Region is consistent with platform resources
+- [ ] NSG exists in `rg-platform`
+- [ ] NSG is associated with `snet-app`
+- [ ] Least-privilege inbound rules are configured
+- [ ] Default deny inbound behavior is enforced
 
-Subnets
+### Effective Security Rules
 
- snet-app exists
+- [ ] Effective rules reflect intended NSG configuration
+- [ ] No unintended inbound access is permitted
 
- snet-mgmt (or reserved subnet) exists
+---
 
- Address ranges do not overlap
+## Security & Key Vault Validation
 
-Network Security Groups
+### Key Vault Configuration
 
- NSG exists in rg-platform
+- [ ] Key Vault exists in `rg-platform`
+- [ ] Soft delete is enabled
+- [ ] Purge protection is enabled
+- [ ] RBAC authorization model is enabled
+- [ ] No access policies are configured (RBAC only)
 
- NSG is associated with snet-app
+### Access Control
 
- Least-privilege inbound rules are defined
+- [ ] Administrative access is restricted
+- [ ] Web App Managed Identity has **Key Vault Secrets User** role
+- [ ] Role assignments are scoped to the Key Vault resource
 
- Default deny inbound behavior is enforced
+### Secrets
 
-Effective Security Rules
+- [ ] Test secret exists (`demo-secret`)
+- [ ] No secrets stored in application configuration
+- [ ] No secrets committed to source control
 
- Effective security rules reflect intended NSG configuration
+---
 
- No unintended inbound access is permitted
+## Workload Validation
 
-Security & Key Vault Validation
-Key Vault Configuration
+### App Service Plan
 
- Key Vault exists in rg-platform
+- [ ] App Service Plan exists in `rg-workload`
+- [ ] SKU is appropriate for lab usage
+- [ ] Region matches platform resources
 
- Soft delete is enabled
+### Web App
 
- Purge protection is enabled
+- [ ] Web App is running
+- [ ] Default/sample page loads successfully
+- [ ] Managed Identity is enabled
+- [ ] Application does not store secrets locally
 
- RBAC authorization model is enabled
+### Deployment Slot
 
- No access policies are configured
+- [ ] Staging slot exists
+- [ ] Slot URL is accessible
+- [ ] Slot configuration cloned correctly
 
-Access Control
+---
 
- Administrative access is restricted
+## Monitoring & Alerting Validation
 
- Web App Managed Identity has Key Vault Secrets User role
+### Log Analytics
 
- Role assignments are scoped to the Key Vault resource
+- [ ] Log Analytics Workspace exists
+- [ ] Diagnostic logs are being ingested
+- [ ] Logs contain recent timestamps
 
-Secrets
+### Application Insights
 
- Test secret exists (demo-secret)
+- [ ] Workspace-based configuration enabled
+- [ ] Requests and availability data visible
 
- No secrets are stored in application configuration or source control
+### Diagnostic Settings
 
-Workload Validation
-App Service Plan
+- [ ] Diagnostic settings configured for Web App
+- [ ] Logs routed to Log Analytics
+- [ ] Metrics enabled where supported
 
- App Service Plan exists in rg-workload
+### Alerts
 
- SKU is appropriate for lab usage
+- [ ] Availability test configured
+- [ ] Availability alert rule enabled
+- [ ] Server error (5xx) alert exists
+- [ ] Alert action group configured
 
- Region matches platform resources
+---
 
-Web App
+## Cost Management Validation
 
- Web App is running
+### Budget
 
- Default or sample page loads successfully
+- [ ] Budget created at correct scope
+- [ ] Budget amount defined
+- [ ] Alert thresholds configured
+- [ ] Email notifications enabled
 
- Managed Identity is enabled
+---
 
- Application does not store secrets locally
+## Operational Readiness
 
-Deployment Slot
+- [ ] Environment can be safely destroyed and recreated
+- [ ] No manual steps remain undocumented
+- [ ] Configuration decisions align with `decisions.md`
 
- Staging slot exists
+---
 
- Slot URL is accessible
-
- Slot configuration is cloned correctly
-
-Monitoring & Alerting Validation
-Log Analytics
-
- Log Analytics Workspace exists
-
- Diagnostic logs are being ingested
-
- Logs show recent timestamps
-
-Application Insights
-
- Application Insights is workspace-based
-
- Requests and availability data are visible
-
-Diagnostic Settings
-
- Diagnostic settings exist for the Web App
-
- Logs are routed to Log Analytics
-
- Metrics are enabled where supported
-
-Alerts
-
- Availability test is configured
-
- Availability alert rule is enabled
-
- Server error (5xx) alert exists
-
- Alert action group is configured
-
-Cost Management Validation
-Budget
-
- Budget exists at the correct scope
-
- Budget amount is defined
-
- Alert thresholds are configured
-
- Email notifications are set
-
-Operational Readiness
-
- Environment can be safely destroyed and recreated
-
- No manual steps are undocumented
-
- All configuration decisions align with decisions.md
-
-Final Status
+## Final Status
 
 Manual Deployment Status:
-☐ Pass
-☐ Fail
 
-If Fail, document issues and remediate before proceeding.
+- [ ] **Pass**
+- [ ] **Fail**
+
+If **Fail**, document issues and remediate before proceeding to Infrastructure as Code implementation.
