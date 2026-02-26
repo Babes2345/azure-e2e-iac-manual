@@ -1,0 +1,17 @@
+﻿module.alerts.azurerm_monitor_action_group.email
+module.alerts.azurerm_monitor_scheduled_query_rules_alert_v2.kv_failures
+module.diagnostics.azurerm_monitor_diagnostic_setting.kv_diag
+module.keyvault.data.azurerm_client_config.current
+module.keyvault.azurerm_key_vault.kv
+module.monitoring.azurerm_application_insights.appi
+module.monitoring.azurerm_log_analytics_workspace.law
+module.network.azurerm_network_security_group.app_nsg
+module.network.azurerm_network_security_rule.allow_https_inbound
+module.network.azurerm_network_security_rule.deny_all_inbound
+module.network.azurerm_subnet.subnet["snet-app"]
+module.network.azurerm_subnet.subnet["snet-mgmt"]
+module.network.azurerm_subnet_network_security_group_association.app_subnet_assoc
+module.network.azurerm_virtual_network.vnet
+module.rbac.azurerm_role_assignment.kv_secrets_user
+module.resourcegroups.azurerm_resource_group.platform
+module.resourcegroups.azurerm_resource_group.workload
