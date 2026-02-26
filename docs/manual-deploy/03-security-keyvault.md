@@ -49,7 +49,7 @@ Confirm:
 
 Navigate to:
 
-**Key Vault → Properties**
+**Key Vault -> Properties**
 
 Ensure the following settings are enabled:
 
@@ -71,7 +71,7 @@ These protections are mandatory in most production environments and cannot be di
 
 Navigate to:
 
-**Key Vault → Access configuration**
+**Key Vault -> Access configuration**
 
 Set **Permission model** to:
 Azure role-based access control (RBAC)
@@ -94,7 +94,7 @@ Grant administrative access only to required identities.
 ### Azure Portal
 
 1. Navigate to **Access control (IAM)** on the Key Vault
-2. Select **Add → Add role assignment**
+2. Select **Add -> Add role assignment**
 
 ### Assignment
 
