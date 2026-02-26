@@ -1,4 +1,4 @@
-#Architecture Decisions (ADR-lite)
+# Architecture Decisions (ADR-lite)
 ## ADR-001 - Workload Type: App Service (PaaS) over VMs
 
 Status: Accepted
