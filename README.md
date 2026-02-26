@@ -1,8 +1,8 @@
-# Azure End-to-End Infrastructure (Manual → Terraform)
+# Azure End-to-End Infrastructure (Manual -> Terraform)
 
 Production-style Azure infrastructure baseline demonstrating secure cloud architecture, modular Terraform design, centralized monitoring, and RBAC-driven security controls.
 
-This project was built using a **manual-first → Infrastructure as Code migration model** aligned with **AZ-104 (Azure Administrator)** and **AZ-305 (Azure Solutions Architect)** principles.
+This project was built using a **manual-first -> Infrastructure as Code migration model** aligned with **AZ-104 (Azure Administrator)** and **AZ-305 (Azure Solutions Architect)** principles.
 
 ---
 
