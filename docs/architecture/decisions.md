@@ -26,14 +26,14 @@
 - Status: Accepted
 - Decision: Separate resources into:
 
-- rg-platform (shared services: monitoring, key vault, state storage)
+   rg-platform (shared services: monitoring, key vault, state storage)
 
-- rg-workload (application resources)
+   rg-workload (application resources)
 - Rationale:
 
--- Clear separation of concerns and access boundaries.
+   Clear separation of concerns and access boundaries.
 
--- Supports least-privilege RBAC and easier cost tracking.
+  Supports least-privilege RBAC and easier cost tracking.
 -- Consequences:
 
 -- Requires consistent tagging and naming to keep resources discoverable.
