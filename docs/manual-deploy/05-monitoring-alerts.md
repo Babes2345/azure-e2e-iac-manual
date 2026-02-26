@@ -1,259 +1,237 @@
-05 – Monitoring, Alerts, and Cost Controls
-Purpose
+# Monitoring, Alerts, and Cost Controls - Phase 05
 
-Enable day-2 operational readiness by ensuring the environment is observable, alerting is configured, and cost controls are in place.
+## Purpose
+
+This phase enables **Day-2 operational readiness** by ensuring the environment is observable, alerting is configured, and cost protections are enforced.
 
 By the end of this step:
 
-Logs and metrics are centrally collected
+- Logs and metrics are centrally collected
+- Core alerts are configured
+- Availability monitoring is active
+- Cost safeguards prevent unexpected spend
 
-Core alerts are configured
+---
 
-A budget and cost alert exist to prevent unexpected spend
+## Scope
 
-Scope
+This deployment includes:
 
-This step includes:
+- Log Analytics Workspace validation
+- Application Insights validation
+- Web App diagnostic settings
+- Availability monitoring
+- Server error alerting
+- Budget and cost alerts
+- Log ingestion validation
 
-Log Analytics Workspace validation
+---
 
-Application Insights configuration validation
+## Step 1 - Validate Log Analytics Workspace
 
-Diagnostic settings for the Web App
+### Azure Portal
 
-Alerts (availability + 5xx threshold)
+1. Navigate to **Log Analytics workspaces**
+2. Open the workspace created in **Phase 01**
 
-Budget + budget alert
+### Confirm
 
-Validation checks (logs are arriving and alerts are active)
+- Workspace exists in `rg-platform`
+- Region matches platform deployment
+- Workspace opens successfully
 
-Monitoring Baseline
-Step 1 — Validate Log Analytics Workspace
+### Validation
 
-Azure Portal
+- Logs (KQL editor) is accessible
+- No permission errors appear
 
-Navigate to Log Analytics workspaces
+---
 
-Open the workspace created in Step 01
+## Step 2 - Validate Application Insights
 
-Confirm:
+1. Navigate to **Application Insights**
+2. Open the instance created earlier
 
-Workspace is in rg-platform
+### Confirm
 
-Region is correct
+- Workspace-based Application Insights is enabled
+- Linked to Log Analytics workspace
+- Region and resource group are correct
 
-Workspace is accessible
+### Validation
 
-Validation
+- Overview dashboard loads
+- Metrics panel is accessible
+- Requests may initially be low or zero
 
-Workspace opens successfully
+---
 
-You can access Logs (KQL query editor)
+## Step 3 - Enable Web App Diagnostic Settings
 
-Step 2 — Validate Application Insights
+**Goal:** Forward platform logs into centralized logging.
 
-Navigate to Application Insights
+### Azure Portal
 
-Open the instance created in Step 01
+1. Navigate to the **Web App (production slot)**
+2. Select **Monitoring -> Diagnostic settings**
+3. Select **Add diagnostic setting**
 
-Confirm:
+### Configuration
 
-It is linked to the Log Analytics workspace (workspace-based)
+| Setting | Value |
+|--------|------|
+| Name | `diag-webapp-to-law` |
+| Destination | Send to Log Analytics workspace |
+| Workspace | Platform Log Analytics Workspace |
 
-It is in the correct region and resource group
+### Enable Log Categories (if available)
 
-Validation
+- AppServiceHTTPLogs
+- AppServiceConsoleLogs
+- AppServiceAppLogs
+- AppServiceAuditLogs
+- AllMetrics
 
-Application Insights overview loads
+Select **Save**.
 
-You can view basic metrics (requests may be low/zero initially)
+Repeat for the **staging slot** if treated as a separate resource.
 
-Diagnostic Settings
-Step 3 — Enable Diagnostic Settings for the Web App
+### Validation
 
-Goal: Send platform logs to Log Analytics.
+- Diagnostic setting is visible
+- Log Analytics workspace listed as destination
 
-Navigate to the Web App (production slot)
+---
 
-Select Diagnostic settings (under Monitoring)
+## Step 4 - Create Availability Monitoring
 
-Select Add diagnostic setting
+**Goal:** Detect application downtime.
 
-Configure:
+### Application Insights
 
-Diagnostic setting name: diag-webapp-to-law
+1. Navigate to **Availability**
+2. Select **Create availability test**
 
-Destination: Send to Log Analytics workspace
+### Configuration
 
-Select the workspace created in Step 01
+| Setting | Value |
+|--------|------|
+| Name | `avail-webapp-prod` |
+| URL | Production Web App URL |
+| Frequency | 5 minutes |
+| Test Locations | 1–3 locations (cost conscious) |
 
-Under log categories, enable the available logs (typical examples):
+Enable alert creation.
 
-AppServiceHTTPLogs
+### Alert Configuration
 
-AppServiceConsoleLogs
+| Setting | Value |
+|--------|------|
+| Severity | Sev 2 |
+| Action Group | Email notification |
 
-AppServiceAppLogs
+### Validation
 
-AppServiceAuditLogs (if available)
+- Availability results appear after several minutes
+- Alert rule is visible under **Monitor -> Alerts**
 
-AllMetrics (if available)
+---
 
-Save
+## Step 5 - Create 5xx Server Error Alert
 
-Repeat for the staging slot if it is treated as a separate resource in the portal.
+**Goal:** Detect sustained server-side failures.
 
-Validation
+### Azure Portal
 
-Diagnostic setting is saved and visible on the Web App
+1. Navigate to **Monitor -> Alerts**
+2. Select **Create -> Alert rule**
 
-Log Analytics workspace is the destination
+### Configuration
 
-Alerts
-Step 4 — Create Availability Monitoring (Availability Test)
+| Setting | Value |
+|--------|------|
+| Scope | Production Web App |
+| Condition | Server Errors / HTTP 5xx |
+| Threshold | > 5 errors within 5 minutes |
+| Severity | Sev 2 or Sev 3 |
+| Action Group | Existing email action group |
 
-Goal: Alert if the app is unreachable.
+Create the alert.
 
-Open Application Insights
+### Validation
 
-Navigate to Availability
+- Alert shows as **Enabled**
+- Rule appears in Alerts list
 
-Create a new availability test:
+---
 
-Name: avail-webapp-prod
+## Step 6 - Apply Required Tags
 
-URL: Production Web App URL
+Ensure all resources include standardized tags:
 
-Test frequency: 5 minutes (or lowest acceptable)
+- `environment`
+- `project`
+- `owner`
+- `costCenter`
 
-Locations: Use 1–3 locations (keep costs low)
+### Validation
 
-Create an alert rule when availability fails:
+Review resources inside resource groups and confirm consistent tagging.
 
-Severity: Sev 2 (or medium)
+---
 
-Action group: Create new (email yourself)
+## Step 7 - Configure Budget and Cost Alerts
 
-Validation
+**Goal:** Prevent unexpected costs.
 
-Availability test shows results after a few minutes
+### Azure Portal
 
-Alert rule is visible under Alerts
+1. Navigate to **Cost Management + Billing**
+2. Select **Budgets -> Create**
 
-Step 5 — Create a 5xx Server Error Alert
+### Scope
 
-Goal: Alert on sustained server-side errors.
+- Subscription (preferred)  
+  or
+- `rg-workload` (acceptable)
 
-Azure Portal
+### Configuration
 
-Navigate to Monitor
+| Setting | Example |
+|--------|--------|
+| Name | `budget-e2e-project` |
+| Amount | $25–$50 |
+| Reset Period | Monthly |
 
-Select Alerts → Create → Alert rule
+### Alert Thresholds
 
-Configure:
+- 50% Actual Spend
+- 80% Actual Spend
+- 100% Actual Spend
 
-Scope: Web App (production)
+Add your email as recipient.
 
-Condition: “Server errors” (or HTTP 5xx metric if available)
+### Validation
 
-Threshold: Example: > 5 errors in 5 minutes (adjust as needed)
+- Budget status = Active
+- Alert thresholds visible
 
-Severity: Sev 2 or Sev 3
+---
 
-Action group: Reuse the same group from availability
+## Step 8 - Validate Log Ingestion
 
-Create the alert
+Navigate to:
 
-Validation
+**Log Analytics Workspace -> Logs**
 
-Alert appears under Monitor → Alerts
+Run a validation query.
 
-Alert shows as Enabled
+### Example Queries
 
-Cost Controls
-Step 6 — Apply Required Tags (If Not Already Applied)
+#### Broad Search
 
-Ensure all resources have required tags (minimum):
-
-environment
-
-project
-
-owner
-
-costCenter
-
-Validation
-
-View resources in RG and confirm tags are present and consistent
-
-Step 7 — Create a Budget + Alert
-
-Goal: Prevent cost overruns.
-
-Navigate to Cost Management + Billing
-
-Select Budgets
-
-Create a budget scoped to:
-
-Subscription (preferred) or rg-workload (acceptable)
-
-Configure:
-
-Name: budget-e2e-project
-
-Amount: Set a low lab-safe amount (example: $25–$50)
-
-Reset period: Monthly
-
-Alerts:
-
-50% actual
-
-80% actual
-
-100% actual
-
-Alert recipients: Your email
-
-Validation
-
-Budget shows as Active
-
-Alert thresholds are configured
-
-Validation Queries (Log Analytics)
-Step 8 — Confirm Logs Are Arriving
-
-Go to Log Analytics Workspace → Logs
-
-Run a simple query to confirm App Service logs are present.
-
-Examples (tables vary by configuration; use what appears in your workspace):
-
-Search broadly for App Service entries:
-
-Query: search for AppService or for your Web App name
-
-Confirm metrics/events are present:
-
-Validate you see recent timestamps
-
-Validation
-
-You can see ingestion occurring (even minimal)
-
-Outcome
-
-At the completion of this step:
-
-Logs and metrics are centralized
-
-Availability monitoring is in place
-
-Error-based alerting is configured
-
-Cost budget and alerts exist
-
-The environment supports basic operational requirements
+```kql
+search "AppService"
+AzureDiagnostics
+| sort by TimeGenerated desc
+| take 50
