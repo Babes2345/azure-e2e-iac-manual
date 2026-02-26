@@ -1,4 +1,4 @@
-# Architecture Summary — Azure E2E Infrastructure Baseline
+# Architecture Summary - Azure E2E Infrastructure Baseline
 
 ## Purpose
 
@@ -14,7 +14,7 @@ The objective is to show how a secure Azure foundation can be deployed, monitore
 
 Infrastructure is separated into two logical resource groups to model an enterprise platform/workload boundary.
 
-### Platform Resource Group — `rg-platform-dev`
+### Platform Resource Group - `rg-platform-dev`
 
 Shared foundational services:
 
@@ -30,7 +30,7 @@ This layer represents reusable platform infrastructure shared across workloads.
 
 ---
 
-### Workload Resource Group — `rg-workload-dev`
+### Workload Resource Group - `rg-workload-dev`
 
 Application-facing resources:
 
