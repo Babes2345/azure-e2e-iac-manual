@@ -1,188 +1,183 @@
-04 – Workload Deployment (App Service)
-Purpose
+# Workload Deployment (App Service) - Phase 04
 
-Deploy a simple, production-aligned application workload that validates:
+## Purpose
 
-Platform readiness
+This phase deploys a simple, production-aligned application workload used to validate:
 
-Managed Identity usage
+- Platform readiness
+- Managed Identity authentication
+- Secure Key Vault access
+- Monitoring and diagnostics integration
 
-Secure access to Key Vault
+The workload is intentionally lightweight to keep focus on **architecture, security, and operational design** rather than application complexity.
 
-Monitoring and diagnostics integration
+---
 
-The workload is intentionally lightweight to keep focus on architecture, security, and operations.
+## Scope
 
-Scope
+This deployment includes:
 
-This step includes:
+- App Service Plan creation
+- Web App deployment
+- Managed Identity enablement
+- Deployment slot creation
+- Key Vault RBAC configuration
+- Workload validation
 
-App Service Plan creation
+---
 
-Web App deployment
+## Step 1 - Create the App Service Plan
 
-Managed Identity enablement
+### Azure Portal
 
-Deployment slot creation
+1. Navigate to **App Service plans**
+2. Select **Create**
 
-Key Vault access configuration
+### Configuration
 
-Basic validation
+| Setting | Value |
+|--------|------|
+| Subscription | Target subscription |
+| Resource Group | `rg-workload` |
+| Name | Project-aligned name (e.g., `asp-e2e-prod`) |
+| Operating System | Linux |
+| Region | Same region as platform resources |
+| Pricing Plan | Basic or low-cost production SKU (e.g., B1) |
 
-App Service Plan
-Step 1 — Create the App Service Plan
+Select **Review + Create**, then **Create**.
 
-Azure Portal
-
-Navigate to App Service plans
-
-Select Create
-
-Configure:
-
-Subscription: Target subscription
-
-Resource Group: rg-workload
-
-Name: e.g., asp-e2e-prod
-
-Operating System: Linux
-
-Region: Same region as platform resources
-
-Pricing plan: Basic or lower-cost production-appropriate SKU (e.g., B1)
-
-Review and create
-
-Validation
-
-App Service Plan exists in rg-workload
-
-Region and SKU are correct
-
-Web App
-Step 2 — Create the Web App
-
-Navigate to App Services
-
-Select Create
-
-Configure:
-
-Subscription: Target subscription
-
-Resource Group: rg-workload
-
-Name: Globally unique name (e.g., app-e2e-prod)
-
-Publish: Code
-
-Runtime stack: Any supported runtime (e.g., .NET, Node.js)
-
-Region: Same as App Service Plan
-
-App Service Plan: asp-e2e-prod
-
-Create the Web App
-
-Validation
-
-Web App is running
-
-Default landing page loads successfully
-
-Managed Identity
-Step 3 — Enable Managed Identity
-
-Open the Web App
-
-Navigate to Identity
-
-Enable System assigned managed identity
-
-Save changes
-
-Validation
-
-Status shows On
-
-Object (principal) ID is generated
-
-Deployment Slot
-Step 4 — Create a Staging Deployment Slot
-
-In the Web App, navigate to Deployment slots
-
-Select Add Slot
-
-Configure:
-
-Name: staging
-
-Clone settings from: Production
-
-Create slot
-
-Validation
-
-Staging slot exists
-
-Slot has its own URL
-
-Slot is running
-
-Key Vault Access
-Step 5 — Grant Key Vault Access to Managed Identity
-
-Navigate to the Key Vault created in Step 03
-
-Open Access control (IAM)
-
-Select Add role assignment
-
-Assign:
-
-Role: Key Vault Secrets User
-
-Scope: This resource
-
-Member: Web App managed identity
-
-Save assignment
-
-Validation
-
-Role assignment appears in Key Vault IAM
-
-No access policies are used (RBAC only)
-
-Validation
-Step 6 — Workload Validation Checklist
+### Validation
 
 Confirm:
 
-Web App is accessible
+- App Service Plan exists in `rg-workload`
+- Region matches platform resources
+- SKU is correctly applied
 
-Managed Identity is enabled
+---
 
-Deployment slot is functional
+## Step 2 - Create the Web App
 
-Key Vault role assignment exists
+Navigate to **App Services  -> Create**.
 
-No secrets are stored in application settings
+### Configuration
 
-Optional (if runtime supports it):
+| Setting | Value |
+|--------|------|
+| Subscription | Target subscription |
+| Resource Group | `rg-workload` |
+| Name | Globally unique (e.g., `app-e2e-prod`) |
+| Publish | Code |
+| Runtime Stack | Any supported runtime (.NET, Node.js, etc.) |
+| Region | Same as App Service Plan |
+| App Service Plan | `asp-e2e-prod` |
 
-Test secret retrieval via Managed Identity
+Create the Web App.
 
-Outcome
+### Validation
 
-At the completion of this step:
+Confirm:
 
-A production-aligned workload is deployed
+- Web App status shows **Running**
+- Default landing page loads successfully via browser
 
-Identity is handled securely via Managed Identity
+---
 
-Key Vault access is configured correctly
+## Step 3 - Enable Managed Identity
 
-The application is ready for monitoring and alerting
+1. Open the Web App
+2. Navigate to **Identity**
+3. Enable **System assigned managed identity**
+4. Select **Save**
+
+### Validation
+
+Confirm:
+
+- Status = **On**
+- Object (Principal) ID is generated
+
+This identity will be used for secure service-to-service authentication.
+
+---
+
+## Step 4 - Create a Staging Deployment Slot
+
+1. Navigate to **Deployment slots**
+2. Select **Add Slot**
+
+### Configuration
+
+| Setting | Value |
+|--------|------|
+| Slot Name | `staging` |
+| Clone Settings From | Production |
+
+Create the slot.
+
+### Validation
+
+Confirm:
+
+- Staging slot exists
+- Slot has its own URL
+- Slot status shows **Running**
+
+Deployment slots enable safer release strategies and blue/green deployments.
+
+---
+
+## Step 5 - Grant Key Vault Access to Managed Identity
+
+Navigate to the Key Vault created in Phase 03.
+
+### Assign RBAC Role
+
+1. Open **Access control (IAM)**
+2. Select **Add  -> Add role assignment**
+
+| Setting | Value |
+|--------|------|
+| Role | Key Vault Secrets User |
+| Scope | This resource |
+| Member | Web App Managed Identity |
+
+Save the assignment.
+
+### Validation
+
+Confirm:
+
+- Role assignment appears under Key Vault IAM
+- No legacy access policies are configured (RBAC-only model)
+
+---
+
+## Step 6 - Workload Validation Checklist
+
+Verify the following:
+
+-   Web App is accessible
+-   Managed Identity is enabled
+-   Deployment slot is operational
+-   Key Vault RBAC assignment exists
+-   No secrets stored in application settings
+
+### Optional Validation
+
+If runtime supports Managed Identity:
+
+- Retrieve a Key Vault secret using Managed Identity authentication.
+
+---
+
+## Outcome
+
+At completion of this phase:
+
+- A production-aligned workload is deployed
+- Authentication is handled securely via Managed Identity
+- Key Vault access follows least-privilege principles
+- The application is ready for monitoring, diagnostics, and alerting
+
+Proceed to **Phase 05 - Monitoring and Alerting**.
