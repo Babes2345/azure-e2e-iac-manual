@@ -1,150 +1,150 @@
-Architecture Overview (v1)
-Goals
+# Architecture Overview (v1)
+## Goals
 
 Design and implement a production-style Azure environment that demonstrates the ability to plan, deploy, secure, monitor, and manage cloud infrastructure using both manual methods and Infrastructure as Code.
 
 The goal of this project is to showcase:
 
-Clear architectural decision-making
+- Clear architectural decision-making
 
-Proper use of Azure-native services
+- Proper use of Azure-native services
 
-Security-first and operations-aware design
+- Security-first and operations-aware design
 
-Repeatable infrastructure using Terraform and Bicep
+- Repeatable infrastructure using Terraform and Bicep
 
-Practical alignment with real-world scenarios rather than overengineered solutions
+- Practical alignment with real-world scenarios rather than overengineered solutions
 
-This environment is intentionally scoped to represent a single workload deployed following enterprise best practices.
+- This environment is intentionally scoped to represent a single workload deployed following enterprise best practices.
 
-Non-Goals
+## Non-Goals
 
-To maintain focus and avoid unnecessary complexity, the following are explicitly out of scope:
+- To maintain focus and avoid unnecessary complexity, the following are explicitly out of scope:
 
-Multi-region active/active architectures
+- Multi-region active/active architectures
 
-Kubernetes or container orchestration
+- Kubernetes or container orchestration
 
-Full hub-and-spoke networking with Azure Firewall
+- Full hub-and-spoke networking with Azure Firewall
 
-Large-scale Azure Policy initiatives at management group level
+- Large-scale Azure Policy initiatives at management group level
 
-Complex CI/CD pipelines (optional future enhancement)
+- Complex CI/CD pipelines (optional future enhancement)
 
-Advanced zero-trust networking implementations
+- Advanced zero-trust networking implementations
 
-These may be explored in future projects but are not required to meet this project’s objectives.
+- These may be explored in future projects but are not required to meet this project’s objectives.
 
-Components
-Core Platform Components
+## Components
+### Core Platform Components
 
-Azure Resource Groups (platform and workload separation)
+- Azure Resource Groups (platform and workload separation)
 
-Azure Virtual Network
+- Azure Virtual Network
 
-Network Security Groups (NSGs)
+- Network Security Groups (NSGs)
 
-Azure Key Vault
+- Azure Key Vault
 
-Azure Monitor
+- Azure Monitor
 
-Log Analytics Workspace
+- Log Analytics Workspace
 
-Azure RBAC
+- Azure RBAC
 
-Azure Cost Management (budgets and alerts)
+- Azure Cost Management (budgets and alerts)
+  
+- Infrastructure as Code
 
-Infrastructure as Code
+- Terraform (primary IaC implementation)
 
-Terraform (primary IaC implementation)
+- Bicep (Azure-native IaC implementation for parity)
 
-Bicep (Azure-native IaC implementation for parity)
-
-Networking Plan
+## Networking Plan
 
 The environment will use a single Virtual Network with clearly defined subnets to support future expansion while keeping the initial design simple.
 
 One Virtual Network with a defined address space
 
-Dedicated subnets for:
+### Dedicated subnets for:
 
-Application workload
+- Application workload
 
-Management or future private endpoints
+- Management or future private endpoints
 
-Network Security Groups applied at the subnet level
+- Network Security Groups applied at the subnet level
 
-NSG rules follow least-privilege principles
+- NSG rules follow least-privilege principles
 
 Inbound access restricted to known, trusted IP ranges where applicable
 
 This design reflects a realistic production baseline without introducing unnecessary complexity such as full hub-and-spoke architectures.
 
-Security Plan
+## Security Plan
 
-Security is implemented using Azure-native controls, following shared responsibility and defense-in-depth principles:
+### Security is implemented using Azure-native controls, following shared responsibility and defense-in-depth principles:
 
-Azure Active Directory authentication with Multi-Factor Authentication
+- Azure Active Directory authentication with Multi-Factor Authentication
 
-Role-Based Access Control (RBAC) scoped at resource group level
+- Role-Based Access Control (RBAC) scoped at resource group level
 
-Managed Identities for Azure resources where applicable
+- Managed Identities for Azure resources where applicable
 
-Azure Key Vault for secret management
+- Azure Key Vault for secret management
 
-Secure access patterns for administrative access
+- Secure access patterns for administrative access
 
-Optional use of Azure Bastion for management access (if virtual machines are introduced)
+- Optional use of Azure Bastion for management access (if virtual machines are introduced)
 
-No secrets are hard-coded or stored in source control.
+- No secrets are hard-coded or stored in source control.
 
-Monitoring Plan
+## Monitoring Plan
 
-Monitoring and observability are treated as first-class components of the architecture.
+- Monitoring and observability are treated as first-class components of the architecture.
 
-Azure Monitor for platform-level metrics
+- Azure Monitor for platform-level metrics
 
-Log Analytics Workspace as the central log store
+- Log Analytics Workspace as the central log store
 
-Diagnostic settings enabled on supported resources
+- Diagnostic settings enabled on supported resources
 
-Application and infrastructure health monitoring
+- Application and infrastructure health monitoring
 
-Basic alerting for availability and critical thresholds
+- Basic alerting for availability and critical thresholds
 
-This ensures the environment supports both day-1 deployment and day-2 operations.
+- This ensures the environment supports both day-1 deployment and day-2 operations.
 
-Cost Controls
+## Cost Controls
 
-Cost management is incorporated from the start:
+- Cost management is incorporated from the start:
 
-Consistent tagging strategy for cost allocation
+- Consistent tagging strategy for cost allocation
 
-Azure budget configured at the resource group or subscription level
+- Azure budget configured at the resource group or subscription level
 
-Cost alerts for threshold breaches
+- Cost alerts for threshold breaches
 
-Selection of SKUs appropriate for lab and learning purposes
+- Selection of SKUs appropriate for lab and learning purposes
+  
+- Resources can be safely destroyed and recreated to minimize unnecessary spend.
 
-Resources can be safely destroyed and recreated to minimize unnecessary spend.
+## Open Decisions
 
-Open Decisions
+### The following decisions will be finalized during implementation:
 
-The following decisions will be finalized during implementation:
+- Final workload type (App Service vs virtual machine-based workload)
 
-Final workload type (App Service vs virtual machine-based workload)
+- Private networking enhancements (e.g., private endpoints)
 
-Private networking enhancements (e.g., private endpoints)
+- Alert thresholds and monitoring depth
 
-Alert thresholds and monitoring depth
+- Terraform module structure vs single-stack approach
 
-Terraform module structure vs single-stack approach
+- CI/CD integration scope (if any)
 
-CI/CD integration scope (if any)
+- All decisions will be documented in the architecture decision log.
 
-All decisions will be documented in the architecture decision log.
-
-Status
+## Status
 
 This document represents Architecture v1 and is considered locked for manual deployment.
 Any future changes must be documented and justified to avoid scope creep.
