@@ -4,9 +4,9 @@
 
 ## ADR-001 - Workload Type: App Service (PaaS) over VMs
 
-- Status: Accepted
-- Decision: Use Azure App Service (Web App) as the primary workload for this project.
-- Rationale:
+- #### Status: Accepted
+- #### Decision: Use Azure App Service (Web App) as the primary workload for this project.
+- #### Rationale:
 
     Demonstrates production-relevant PaaS patterns (identity, monitoring, deployment slots).
    
