@@ -172,13 +172,6 @@ Sensitive infrastructure implementation details remain restricted while architec
 
 ---
 
-## Author
-Andrew Babes 
-Cloud Infrastructure Engineer Portfolio Project  
-Focused on Azure Administration, Cloud Security, and Infrastructure as Code.
-
----
-
 ## Future Enhancements
 
 Planned improvements:
@@ -204,6 +197,13 @@ Key takeaways:
 - **Cost awareness:** designing within free-tier limitations and documenting trade-offs and governance controls.
 
 Although this was a portfolio lab environment rather than a production system, it provided real, hands-on experience with the same patterns used in real-world Azure infrastructure delivery and operations.
+
+---
+
+## Author
+Andrew Babes 
+Cloud Infrastructure Engineer Portfolio Project  
+Focused on Azure Administration, Cloud Security, and Infrastructure as Code.
 
 ---
 
