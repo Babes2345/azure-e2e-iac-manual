@@ -23,3 +23,9 @@ jobs:
 
     - name: Terraform Plan
       run: terraform plan
+
+    - name: Terraform Format Check
+      run: terraform fmt -check
+
+    - name: tfsec Scan
+      uses: aquasecurity/tfsec-action@v1.0.0
