@@ -13,9 +13,8 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Print Repo Structure
-        run: ls -R
+      - name: Print Working Directory
+        run: pwd
 
-    defaults:
-      run:
-        working-directory: iac/terraform/envs/dev
+      - name: List Root Files
+        run: ls -la
