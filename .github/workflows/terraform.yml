@@ -10,12 +10,11 @@ on:
 
 jobs:
   terraform-validation:
-    name: Validate & Plan Infrastructure
     runs-on: ubuntu-latest
 
     defaults:
       run:
-        working-directory: environments/dev   
+        working-directory: iac/terraform 
 
     steps:
       - name: Checkout Repository
