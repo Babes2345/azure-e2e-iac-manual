@@ -4,33 +4,18 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  terraform-validation:
+  debug:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: iac/terraform/envs/dev
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Debug Directory
+      - name: Print Repo Structure
         run: ls -R
 
-      - name: Setup Terraform CLI
-        uses: hashicorp/setup-terraform@v2
-
-      - name: Terraform Init
-        run: terraform init -input=false
-
-      - name: Terraform Validate
-        run: terraform validate
-
-      - name: Terraform Plan
-        run: terraform plan -no-color
+    defaults:
+      run:
+        working-directory: iac/terraform/envs/dev
