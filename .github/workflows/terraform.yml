@@ -23,19 +23,19 @@ jobs:
 
       - name: Terraform Format Check
         run: terraform fmt -check -recursive
-        working-directory: iac/terraform/envs/dev
+        working-directory: iac/terraform/envs/devs   
 
       - name: Terraform Init
         run: terraform init -input=false
-        working-directory: iac/terraform/envs/dev
+        working-directory: iac/terraform/envs/devs
 
       - name: Terraform Validate
         run: terraform validate
-        working-directory: iac/terraform/envs/dev
+        working-directory: iac/terraform/envs/devs
 
       - name: Terraform Plan
         run: terraform plan -no-color
-        working-directory: iac/terraform/envs/dev
+        working-directory: iac/terraform/envs/devs
 
       - name: Security Scan (tfsec)
         uses: aquasecurity/tfsec-action@v1.0.0
