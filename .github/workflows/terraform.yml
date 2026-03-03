@@ -4,17 +4,38 @@ on:
   push:
     branches:
       - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  debug:
+  terraform-validation:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Print Working Directory
-        run: pwd
+      - name: Setup Terraform CLI
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.6.6
 
-      - name: List Root Files
-        run: ls -la
+      - name: Terraform Format Check
+        run: terraform fmt -check -recursive
+        working-directory: iac/terraform/envs/dev
+
+      - name: Terraform Init
+        run: terraform init -input=false
+        working-directory: iac/terraform/envs/dev
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: iac/terraform/envs/dev
+
+      - name: Terraform Plan
+        run: terraform plan -no-color
+        working-directory: iac/terraform/envs/dev
+
+      - name: Security Scan (tfsec)
+        uses: aquasecurity/tfsec-action@v1.0.0
