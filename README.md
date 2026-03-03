@@ -194,3 +194,17 @@ Planned improvements:
 ## License
 
 Portfolio demonstration project — not intended for production reuse without modification
+
+## What I Learned
+
+Building this project strengthened my ability to design and operate a production-style Azure baseline end-to-end. I learned how to break an environment into clear platform and workload layers, and how to make architecture decisions based on requirements such as security, observability, and cost constraints.
+
+Key takeaways:
+
+- **Architecture thinking:** translating project goals into concrete design choices (network segmentation, RBAC-first security, centralized logging).
+- **Security-first implementation:** using Azure RBAC and Managed Identity with Key Vault to avoid secrets in code and reduce credential risk.
+- **Operational readiness:** configuring diagnostics, Log Analytics queries, and alerting so the environment is observable and testable.
+- **Infrastructure as Code maturity:** moving from manual deployment to Terraform parity using modular design and remote state.
+- **Cost awareness:** designing within free-tier limitations and documenting trade-offs and governance controls.
+
+Although this was a portfolio lab environment rather than a production system, it provided real, hands-on experience with the same patterns used in real-world Azure infrastructure delivery and operations.
